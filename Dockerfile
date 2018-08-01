@@ -1,5 +1,7 @@
-FROM alpine:3.8
+FROM debian:buster-slim
 
-RUN apk --update add fcron docker make bash
+RUN apt-get update \
+    && apt-get -y install cron docker.io make bash \
+    && apt-get clean -y
 
-CMD /bin/bash -c "fcron -f -d"
+CMD /bin/bash -c "(cp /root/cron /var/spool/cron/crontabs/root 2>/dev/null || true) && cron -l 0 -f"
